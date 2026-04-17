@@ -7,7 +7,7 @@ jobs:
   Linux_Build_x64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: sudo apt-get install g++-multilib
@@ -22,7 +22,7 @@ jobs:
         run: ./speexdsp/configure CFLAGS=-m64 CXXFLAGS=-m64 LDFLAGS=-m64 && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: linux-x86_64-libspeexdsp.so.1.5.2
           path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
@@ -30,7 +30,7 @@ jobs:
   Linux_Build_x32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: sudo apt-get install g++-multilib
@@ -45,7 +45,7 @@ jobs:
         run: ./speexdsp/configure CFLAGS=-m32 CXXFLAGS=-m32 LDFLAGS=-m32 && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: linux-x86-libspeexdsp.so.1.5.2
           path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
@@ -53,7 +53,7 @@ jobs:
   Linux_Build_Arm64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
 
       - name: Setup Build Libraries
         run: sudo apt-get install g++-aarch64-linux-gnu
@@ -68,7 +68,7 @@ jobs:
         run: ./speexdsp/configure --host=aarch64-linux-gnu && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: linux-arm64-libspeexdsp.so.1.5.2
           path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
@@ -76,7 +76,7 @@ jobs:
   Linux_Build_Arm32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: sudo apt-get install g++-arm-linux-gnueabi
@@ -91,7 +91,7 @@ jobs:
         run: ./speexdsp/configure --host=arm-linux-gnueabi && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: linux-arm32-libspeexdsp.so.1.5.2
           path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
@@ -99,7 +99,7 @@ jobs:
   Win_Build_x64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: sudo apt-get install mingw-w64
@@ -114,7 +114,7 @@ jobs:
         run: ./speexdsp/configure --host=x86_64-w64-mingw32 && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: win-x86_64-libspeexdsp-1.dll
           path: ./libspeexdsp/.libs/libspeexdsp-1.dll
@@ -122,7 +122,7 @@ jobs:
   Win_Build_x32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: sudo apt-get install mingw-w64
@@ -137,7 +137,7 @@ jobs:
         run: ./speexdsp/configure --host=i686-w64-mingw32 && make
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: win-x86-libspeexdsp-1.dll
           path: ./libspeexdsp/.libs/libspeexdsp-1.dll
@@ -145,7 +145,7 @@ jobs:
   Win_Build_arm64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: |
@@ -176,7 +176,7 @@ jobs:
 #cp -r $TOOLCHAIN ./libspeexdsp IS STUPID BUT IT WORKS
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: win-arm64-libspeexdsp-1.dll
           path: ./libspeexdsp/.libs/libspeexdsp-1.dll
@@ -184,7 +184,7 @@ jobs:
   Win_Build_arm32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.1
       
       - name: Setup Build Libraries
         run: |
@@ -215,7 +215,7 @@ jobs:
 #cp -r $TOOLCHAIN ./libspeexdsp IS STUPID BUT IT WORKS
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: win-arm32-libspeexdsp-1.dll
           path: ./libspeexdsp/.libs/libspeexdsp-1.dll
@@ -223,8 +223,8 @@ jobs:
   Android_Build_x64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: nttld/setup-ndk@v1
+      - uses: actions/checkout@v6.0.1
+      - uses: nttld/setup-ndk@v1.6.0
         id: setup-ndk
         with:
           ndk-version: r27b
@@ -256,7 +256,7 @@ jobs:
           $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: android-x86_64-libspeexdsp.so
           path: ./libspeexdsp/.libs/libspeexdsp.so
@@ -264,8 +264,8 @@ jobs:
   Android_Build_x32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: nttld/setup-ndk@v1
+      - uses: actions/checkout@v6.0.1
+      - uses: nttld/setup-ndk@v1.6.0
         id: setup-ndk
         with:
           ndk-version: r27b
@@ -297,7 +297,7 @@ jobs:
           $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: android-x86-libspeexdsp.so
           path: ./libspeexdsp/.libs/libspeexdsp.so
@@ -305,8 +305,8 @@ jobs:
   Android_Build_arm64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: nttld/setup-ndk@v1
+      - uses: actions/checkout@v6.0.1
+      - uses: nttld/setup-ndk@v1.6.0
         id: setup-ndk
         with:
           ndk-version: r27b
@@ -338,7 +338,7 @@ jobs:
           $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: android-arm64-libspeexdsp.so
           path: ./libspeexdsp/.libs/libspeexdsp.so
@@ -346,8 +346,8 @@ jobs:
   Android_Build_arm32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: nttld/setup-ndk@v1
+      - uses: actions/checkout@v6.0.1
+      - uses: nttld/setup-ndk@v1.6.0
         id: setup-ndk
         with:
           ndk-version: r27b
@@ -379,8 +379,9 @@ jobs:
           $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
           
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: android-arm32-libspeexdsp.so
           path: ./libspeexdsp/.libs/libspeexdsp.so
+
 
