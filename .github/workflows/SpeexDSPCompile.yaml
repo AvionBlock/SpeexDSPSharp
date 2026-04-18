@@ -214,3 +214,90 @@ jobs:
         with:
           name: android-${{ matrix.arch }}-libspeexdsp.so
           path: ./build/libspeexdsp/.libs/libspeexdsp.so
+          
+  Create-Runtimes:
+    runs-on: ubuntu-latest
+    needs: [Android, Linux, Windows]
+    steps:
+      - uses: actions/checkout@v6.0.1
+      
+      # Android
+      - name: Download android-arm32-libspeexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: android-arm32-libspeexdsp.so
+          path: runtimes/android-arm/native
+
+      - name: Download android-arm64-libspeexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: android-arm64-libspeexdsp.so
+          path: runtimes/android-arm64/native
+
+      - name: Download android-x64-libspeexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: android-x64-libspeexdsp.so
+          path: runtimes/android-x64/native
+
+      - name: Download android-x86-libspeexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: android-x86-libspeexdsp.so
+          path: runtimes/android-x86/native
+      
+      # Linux
+      - name: Download linux-arm32-speexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-arm32-speexdsp.so
+          path: runtimes/linux-arm/native
+
+      - name: Download linux-arm64-speexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-arm64-speexdsp.so
+          path: runtimes/linux-arm64/native
+
+      - name: Download linux-x64-speexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-x64-speexdsp.so
+          path: runtimes/linux-x64/native
+
+      - name: Download linux-x86-speexdsp.so
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-x86-speexdsp.so
+          path: runtimes/linux-x86/native
+      
+      # Windows
+      - name: Download win-arm32-speexdsp.dll
+        uses: actions/download-artifact@v4
+        with:
+          name: win-arm32-speexdsp.dll
+          path: runtimes/win-arm32/native
+          
+      - name: Download win-arm64-speexdsp.dll
+        uses: actions/download-artifact@v4
+        with:
+          name: win-arm64-speexdsp.dll
+          path: runtimes/win-arm64/native
+
+      - name: Download win-x64-speexdsp.dll
+        uses: actions/download-artifact@v4
+        with:
+          name: win-x64-speexdsp.dll
+          path: runtimes/win-x64/native
+
+      - name: Download win-x86-speexdsp.dll
+        uses: actions/download-artifact@v4
+        with:
+          name: win-x86-speexdsp.dll
+          path: runtimes/win-x86/native
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: All-Runtimes
+          path: ./runtimes
