@@ -147,12 +147,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CHECK_ALIGNMENT: false
-      strategy:
-        matrix:
-          arch: [ x64, x86, arm64, arm32 ]
-        fail-fast: false
+    strategy:
+      matrix:
+        arch: [ x64, x86, arm64, arm32 ]
+      fail-fast: false
       steps:
         - uses: actions/checkout@v6.0.1
+          
         - uses: nttld/setup-ndk@v1.6.0
           id: setup-ndk
           with:
