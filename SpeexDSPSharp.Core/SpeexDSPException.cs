@@ -1,5 +1,6 @@
 ﻿using System;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core
 {
     /// <summary>

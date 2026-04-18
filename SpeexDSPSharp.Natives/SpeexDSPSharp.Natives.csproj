@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <IsPackable>true</IsPackable>
+
+        <PackageId>SpeexDSPSharp.Natives</PackageId>
+        <Description>Contains native binaries for SpeexDSPSharp.</Description>
+        <Version>$(SpeexDSPSharpNativesVersion)</Version>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <Authors>The SpeexDSPSharp Authors.</Authors>
+
+        <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+        <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" Link="README.md" />
+        <None Include="LICENSE.txt" Pack="true" PackagePath="\" Link="LICENSE.txt" />
+        <None Include="runtimes\**\*" Pack="true" PackagePath="runtimes" />
+    </ItemGroup>
+</Project>

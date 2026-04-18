@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core.SafeHandlers
 {
     /// <summary>
@@ -24,6 +25,19 @@ namespace SpeexDSPSharp.Core.SafeHandlers
         protected override bool ReleaseHandle()
         {
             NativeSpeexDSP.jitter_buffer_destroy(handle);
+            return true;
+        }
+    }
+    
+    /// <summary>
+    /// Managed wrapper over the StaticSpeexDSPJitterBuffer state.
+    /// </summary>
+    public class StaticSpeexDSPJitterBufferSafeHandler : SpeexDSPJitterBufferSafeHandler
+    {
+        /// <inheritdoc/>
+        protected override bool ReleaseHandle()
+        {
+            StaticNativeSpeexDSP.jitter_buffer_destroy(handle);
             return true;
         }
     }

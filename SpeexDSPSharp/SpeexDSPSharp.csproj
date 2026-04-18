@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <IsPackable>true</IsPackable>
+
+        <PackageId>SpeexDSPSharp</PackageId>
+        <Description>SpeexDSPSharp library.</Description>
+        <Version>$(SpeexDSPSharpVersion)</Version>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <Copyright>MIT</Copyright>
+        <Authors>SineVector241</Authors>
+
+        <PackageProjectUrl>https://avionblock.github.io/SpeexDSPSharp/index.html</PackageProjectUrl>
+        <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SpeexDSPSharp.Core\SpeexDSPSharp.Core.csproj" />
+        <ProjectReference Include="..\SpeexDSPSharp.Natives\SpeexDSPSharp.Natives.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+        <None Include="..\LICENSE.txt" Pack="true" PackagePath="\" Link="LICENSE.txt" />
+    </ItemGroup>
+</Project>

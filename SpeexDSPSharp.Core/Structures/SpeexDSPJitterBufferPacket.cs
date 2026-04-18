@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core.Structures
 {
     /// <summary>
