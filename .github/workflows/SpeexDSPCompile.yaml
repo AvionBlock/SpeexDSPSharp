@@ -34,7 +34,7 @@ jobs:
           fi
             
       - name: Create Build Directory
-          run: mkdir build
+        run: mkdir build
           
       - name: Clone Repository
         run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
