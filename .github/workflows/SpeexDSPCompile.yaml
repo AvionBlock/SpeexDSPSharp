@@ -59,13 +59,13 @@ jobs:
         
       - name: Rename File
         working-directory: ./build/libspeexdsp/.libs
-        run: mv libspeexdsp.so.*.*.* libspeexdsp.so
+        run: mv libspeexdsp.so.*.*.* speexdsp.so
             
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: linux-${{ matrix.arch }}-libspeexdsp.so
-          path: ./build/libspeexdsp/.libs/libspeexdsp.so
+          name: linux-${{ matrix.arch }}-speexdsp.so
+          path: ./build/libspeexdsp/.libs/speexdsp.so
 
   Windows:
     runs-on: ubuntu-latest
@@ -141,170 +141,72 @@ jobs:
         uses: actions/upload-artifact@v7.0.0
         with:
           name: win-${{ matrix.arch }}-libspeexdsp.dll
-          path: ./libspeexdsp/.libs/libspeexdsp.dll
-
-  Android_Build_x64:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: nttld/setup-ndk@v1.6.0
-        id: setup-ndk
-        with:
-          ndk-version: r27b
-          add-to-path: false
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 64bit
-        run: |
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
-          export TARGET=x86_64-linux-android
-          export API=21
-          export PAGE_SIZE_FLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
-          export AR=$TOOLCHAIN/bin/llvm-ar
-          export CC="$TOOLCHAIN/bin/clang --target=$TARGET$API"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/clang++ --target=$TARGET$API"
-          export LD=$TOOLCHAIN/bin/ld
-          export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          LDFLAGS="$PAGE_SIZE_FLAGS" ./speexdsp/configure --host $TARGET
-          make
-          $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: android-x86_64-libspeexdsp.so
-          path: ./libspeexdsp/.libs/libspeexdsp.so
-
-  Android_Build_x32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: nttld/setup-ndk@v1.6.0
-        id: setup-ndk
-        with:
-          ndk-version: r27b
-          add-to-path: false
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit
-        run: |
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
-          export TARGET=i686-linux-android
-          export API=21
-          export PAGE_SIZE_FLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
-          export AR=$TOOLCHAIN/bin/llvm-ar
-          export CC="$TOOLCHAIN/bin/clang --target=$TARGET$API"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/clang++ --target=$TARGET$API"
-          export LD=$TOOLCHAIN/bin/ld
-          export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          LDFLAGS="$PAGE_SIZE_FLAGS" ./speexdsp/configure --host $TARGET
-          make
-          $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: android-x86-libspeexdsp.so
-          path: ./libspeexdsp/.libs/libspeexdsp.so
+          path: ./build/libspeexdsp/.libs/libspeexdsp.dll
           
-  Android_Build_arm64:
+  Android:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: nttld/setup-ndk@v1.6.0
-        id: setup-ndk
-        with:
-          ndk-version: r27b
-          add-to-path: false
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 64bit ARM
-        run: |
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
-          export TARGET=aarch64-linux-android
-          export API=21
-          export PAGE_SIZE_FLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
-          export AR=$TOOLCHAIN/bin/llvm-ar
-          export CC="$TOOLCHAIN/bin/clang --target=$TARGET$API"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/clang++ --target=$TARGET$API"
-          export LD=$TOOLCHAIN/bin/ld
-          export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          LDFLAGS="$PAGE_SIZE_FLAGS" ./speexdsp/configure --host $TARGET
-          make
-          $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: android-arm64-libspeexdsp.so
-          path: ./libspeexdsp/.libs/libspeexdsp.so
-
-  Android_Build_arm32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: nttld/setup-ndk@v1.6.0
-        id: setup-ndk
-        with:
-          ndk-version: r27b
-          add-to-path: false
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit ARM
-        run: |
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
-          export TARGET=armv7a-linux-android
-          export API=21
-          export PAGE_SIZE_FLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
-          export AR=$TOOLCHAIN/bin/llvm-ar
-          export CC="$TOOLCHAIN/bin/clang --target=$TARGET$API"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/clang++ --target=$TARGET$API"
-          export LD=$TOOLCHAIN/bin/ld
-          export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          LDFLAGS="$PAGE_SIZE_FLAGS" ./speexdsp/configure --host $TARGET
-          make
-          $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
+    env:
+      CHECK_ALIGNMENT: false
+      strategy:
+        matrix:
+          arch: [ x64, x86, arm64, arm32 ]
+        fail-fast: false
+      steps:
+        - uses: actions/checkout@v6.0.1
+        - uses: nttld/setup-ndk@v1.6.0
+          id: setup-ndk
+            with:
+              ndk-version: r28c
+              add-to-path: false
+            env:
+              ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+              
+        - name: Setup Environment
+          run: |
+            if [[ "${{ matrix.arch }}" == "x64" ]]; then
+              echo "ABI=x86_64" >> $GITHUB_ENV
+            elif [[ "${{ matrix.arch }}" == "x86" ]]; then
+              echo "ABI=i686" >> $GITHUB_ENV
+            elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
+              echo "ABI=aarch64" >> $GITHUB_ENV
+            elif [[ "${{ matrix.arch }}" == "arm32" ]]; then
+              echo "ABI=armv7a" >> $GITHUB_ENV
+            fi
+            
+        - name: Create Build Directory
+          run: mkdir build
           
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: android-arm32-libspeexdsp.so
-          path: ./libspeexdsp/.libs/libspeexdsp.so
+        - name: Clone Repository
+          run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
 
-
+        - name: Autogen
+          working-directory: ./build
+          run: ../speexdsp/autogen.sh
+          
+        - name: Configure
+          working-directory: ./build
+          run: |
+            export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
+            export TARGET=${{ env.ABI }}-linux-android
+            export API=21
+            export PAGE_SIZE_FLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
+            export AR=$TOOLCHAIN/bin/llvm-ar
+            export CC="$TOOLCHAIN/bin/clang --target=$TARGET$API"
+            export AS=$CC
+            export CXX="$TOOLCHAIN/bin/clang++ --target=$TARGET$API"
+            export LD=$TOOLCHAIN/bin/ld
+            export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+            export STRIP=$TOOLCHAIN/bin/llvm-strip
+            LDFLAGS="$PAGE_SIZE_FLAGS" ../speexdsp/configure --host $TARGET
+            
+        - name: Build
+          working-directory: ./build
+          run: |
+            make
+            $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
+            
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v7.0.0
+          with:
+            name: android-${{ matrix.arch }}-libspeexdsp.so
+            path: ./build/libspeexdsp/.libs/libspeexdsp.so
