@@ -58,7 +58,7 @@ jobs:
         run: make
         
       - name: Print DIR
-        working-directory: ./build/libspeexdsp
+        working-directory: ./build/libspeexdsp/.libs
         run: dir
             
       - name: Upload Artifact
