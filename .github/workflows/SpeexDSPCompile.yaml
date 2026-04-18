@@ -57,15 +57,15 @@ jobs:
         working-directory: ./build
         run: make
         
-      - name: Print DIR
+      - name: Rename File
         working-directory: ./build/libspeexdsp/.libs
-        run: dir
+        run: mv libspeexdsp.so.*.*.* libspeexdsp.so
             
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
         with:
           name: linux-${{ matrix.arch }}-libspeexdsp.so
-          path: ./build/libspeexdsp/.libs/libspeexdsp.so.*.*.*
+          path: ./build/libspeexdsp/.libs/libspeexdsp.so
 
   Win_Build_x64:
     runs-on: ubuntu-latest
