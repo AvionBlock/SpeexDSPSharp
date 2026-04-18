@@ -1,5 +1,6 @@
 using System;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core.Interfaces
 {    
     /// <summary>
@@ -11,80 +12,80 @@ namespace SpeexDSPSharp.Core.Interfaces
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(Span<byte> x);
 
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(Span<short> x);
 
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(Span<float> x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(Span<byte> x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(Span<short> x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(Span<float> x);
 #endif
 
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(byte[] x);
 
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(short[] x);
 
         /// <summary>
         /// Preprocess a frame.
         /// </summary>
-        /// <param name="x">Audio sample vector (in and out). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in and out). Must be same size as when the preprocessor was constructed.</param>
         /// <returns>Bool value for voice activity (1 for speech, 0 for noise/silence), ONLY if VAD turned on.</returns>
         int Run(float[] x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(byte[] x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(short[] x);
 
         /// <summary>
         /// Update preprocessor state, but do not compute the output.
         /// </summary>
-        /// <param name="x">Audio sample vector (in only). Must be same size as specified in <see cref="SpeexDSPPreprocessor(int, int)" />.</param>
+        /// <param name="x">Audio sample vector (in only). Must be same size as when the preprocessor was constructed.</param>
         void EstimateUpdate(float[] x);
 
         /// <summary>
