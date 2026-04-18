@@ -56,6 +56,10 @@ jobs:
       - name: Build
         working-directory: ./build
         run: make
+        
+      - name: Print DIR
+        working-directory: ./build
+        run: dir
             
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
