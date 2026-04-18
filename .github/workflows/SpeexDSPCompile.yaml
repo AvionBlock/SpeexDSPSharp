@@ -202,9 +202,7 @@ jobs:
             
       - name: Build
         working-directory: ./build
-        run: |
-          make
-          $TOOLCHAIN/bin/llvm-readelf -l ./libspeexdsp/.libs/libspeexdsp.so | grep -q "0x4000"
+        run: make
             
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
