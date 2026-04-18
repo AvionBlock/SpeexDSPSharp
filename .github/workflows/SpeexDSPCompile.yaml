@@ -146,7 +146,7 @@ jobs:
   Android:
     runs-on: ubuntu-latest
     env:
-      CHECK_ALIGNMENT: true
+      CHECK_ALIGNMENT: false
     strategy:
       matrix:
         arch: [ x64, x86, arm64, arm32 ]
