@@ -4,97 +4,64 @@ on:
   workflow_dispatch:
 
 jobs:
-  Linux_Build_x64:
+  Linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [ x64, x86, arm64, arm32 ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: sudo apt-get install g++-multilib
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 64bit
-        run: ./speexdsp/configure CFLAGS=-m64 CXXFLAGS=-m64 LDFLAGS=-m64 && make
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: linux-x86_64-libspeexdsp.so.1.5.2
-          path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
-
-  Linux_Build_x32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: sudo apt-get install g++-multilib
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit
-        run: ./speexdsp/configure CFLAGS=-m32 CXXFLAGS=-m32 LDFLAGS=-m32 && make
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: linux-x86-libspeexdsp.so.1.5.2
-          path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
-
-  Linux_Build_Arm64:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-
-      - name: Setup Build Libraries
-        run: sudo apt-get install g++-aarch64-linux-gnu
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 64bit ARM
-        run: ./speexdsp/configure --host=aarch64-linux-gnu && make
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: linux-arm64-libspeexdsp.so.1.5.2
-          path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
+        
+      - name: Setup Environment
+        run: |
+          if [[ "${{ matrix.arch }}" == "x64" ]]; then
+            echo "C_FLAGS=-m64" >> $GITHUB_ENV
+            echo "CXX_FLAGS=-m64" >> $GITHUB_ENV
+            echo "LD_FLAGS=-m64" >> $GITHUB_ENV
+          elif [[ "${{ matrix.arch }}" == "x86" ]]; then
+            sudo apt-get update
+            sudo apt-get install g++-multilib
+            echo "C_FLAGS=-m32" >> $GITHUB_ENV
+            echo "CXX_FLAGS=-m32" >> $GITHUB_ENV
+            echo "LD_FLAGS=-m64" >> $GITHUB_ENV
+          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            sudo apt-get update
+            sudo apt-get install g++-aarch64-linux-gnu
+          elif [[ "${{ matrix.arch }}" == "arm32" ]]; then
+            sudo apt-get update
+            sudo apt-get install g++-arm-linux-gnueabi
+          fi
+            
+      - name: Create Build Directory
+          run: mkdir build
           
-  Linux_Build_Arm32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: sudo apt-get install g++-arm-linux-gnueabi
-
       - name: Clone Repository
         run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
+        
       - name: Autogen
         run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit ARM
-        run: ./speexdsp/configure --host=arm-linux-gnueabi && make
-
+        
+      - name: Configure
+        working-directory: ./build
+        run: |
+          if [[ "${{ matrix.arch }}" == "x64" || "${{ matrix.arch }}" == "x86" ]]; then
+            ../speexdsp/configure CFLAGS=${{ env.C_FLAGS }} CXXFLAGS=${{ env.CXX_FLAGS }} LDFLAGS=${{ env.LD_FLAGS }}
+          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            ../speexdsp/configure --host=aarch64-linux-gnu
+          elif [[ "${{ matrix.arch }}" == "arm32" ]]; then
+            ../speexdsp/configure --host=arm-linux-gnueabi
+          fi
+      
+      - name: Build
+        working-directory: ./build
+        run: make
+            
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: linux-arm32-libspeexdsp.so.1.5.2
-          path: ./libspeexdsp/.libs/libspeexdsp.so.1.5.2
+          name: linux-${{ matrix.arch }}-libspeexdsp.so
+          path: ./build/libspeexdsp/.libs/libspeexdsp.so.*.*.*
 
   Win_Build_x64:
     runs-on: ubuntu-latest
