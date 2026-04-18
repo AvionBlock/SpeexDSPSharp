@@ -1,6 +1,7 @@
 @echo off
-dotnet build ./SpeexDSPSharp.Core/SpeexDSPSharp.Core.csproj -c Release
+if exist local-nuget rmdir /s /q local-nuget
+mkdir local-nuget
 
-nuget pack ./SpeexDSPSharp.Core/SpeexDSPSharp.Core.nuspec -OutputDirectory local-nuget
-nuget pack ./SpeexDSPSharp.Natives/SpeexDSPSharp.Natives.nuspec -OutputDirectory local-nuget
-nuget pack ./SpeexDSPSharp/SpeexDSPSharp.nuspec -OutputDirectory local-nuget
+dotnet pack .\SpeexDSPSharp.Core\SpeexDSPSharp.Core.csproj -c Release -o .\local-nuget
+dotnet pack .\SpeexDSPSharp.Natives\SpeexDSPSharp.Natives.csproj -c Release -o .\local-nuget
+dotnet pack .\SpeexDSPSharp\SpeexDSPSharp.csproj -c Release -o .\local-nuget
