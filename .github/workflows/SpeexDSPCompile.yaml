@@ -135,13 +135,13 @@ jobs:
 
       - name: Rename File
         working-directory: ./build/libspeexdsp/.libs
-        run: mv libspeexdsp-1.dll libspeexdsp.dll
+        run: mv libspeexdsp-1.dll speexdsp.dll
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: win-${{ matrix.arch }}-libspeexdsp.dll
-          path: ./build/libspeexdsp/.libs/libspeexdsp.dll
+          name: win-${{ matrix.arch }}-speexdsp.dll
+          path: ./build/libspeexdsp/.libs/speexdsp.dll
           
   Android:
     runs-on: ubuntu-latest
