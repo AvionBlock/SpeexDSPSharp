@@ -24,7 +24,7 @@ jobs:
             sudo apt-get install g++-multilib
             echo "C_FLAGS=-m32" >> $GITHUB_ENV
             echo "CXX_FLAGS=-m32" >> $GITHUB_ENV
-            echo "LD_FLAGS=-m64" >> $GITHUB_ENV
+            echo "LD_FLAGS=-m32" >> $GITHUB_ENV
           elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
             sudo apt-get update
             sudo apt-get install g++-aarch64-linux-gnu
