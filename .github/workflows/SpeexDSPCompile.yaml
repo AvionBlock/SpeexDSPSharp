@@ -205,9 +205,9 @@ jobs:
         run: make
         
       - name: Check Alignment
-          if: ${{ env.CHECK_ALIGNMENT == 'true' }}
-          working-directory: ./build/libspeexdsp/.libs
-          run: sudo apt install llvm && llvm-objdump -p libspeexdsp.so | grep LOAD
+        if: ${{ env.CHECK_ALIGNMENT == 'true' }}
+        working-directory: ./build/libspeexdsp/.libs
+        run: sudo apt install llvm && llvm-objdump -p libspeexdsp.so | grep LOAD
             
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
