@@ -1,9 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<AssemblyName>SpeexDSPSharp.Core</AssemblyName>
+		<IsPackable>true</IsPackable>
+		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;</TargetFrameworks>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+		<PackageId>SpeexDSPSharp.Core</PackageId>
+		<Description>Standard library for SpeexDSPSharp.</Description>
+		<Version>$(SpeexDSPSharpCoreVersion)</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<Copyright>MIT</Copyright>
+		<Authors>SineVector241</Authors>
+
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<NoWarn>$(NoWarn);nullable</NoWarn>
+		<LangVersion>8.0</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" Link="LICENSE.txt" />
+	</ItemGroup>
 </Project>

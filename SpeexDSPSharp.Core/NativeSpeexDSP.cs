@@ -3,18 +3,15 @@ using SpeexDSPSharp.Core.Structures;
 using System;
 using System.Runtime.InteropServices;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core
 {
     /// <summary>
-    /// Native speexdsp handler that directly calls the exported opus functions.
+    /// Native speexdsp handler that directly calls the exported speexdsp functions.
     /// </summary>
     public static class NativeSpeexDSP
     {
-#if MACOS || IOS || MACCATALYST
-        private const string DllName = "__Internal__";
-#else
         private const string DllName = "speexdsp";
-#endif
 
         //Jitter Buffer
         /// <summary>

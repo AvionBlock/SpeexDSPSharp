@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+//Resharper disable all
 namespace SpeexDSPSharp.Core.SafeHandlers
 {
     /// <summary>
@@ -23,6 +24,19 @@ namespace SpeexDSPSharp.Core.SafeHandlers
         protected override bool ReleaseHandle()
         {
             NativeSpeexDSP.speex_preprocess_state_destroy(handle);
+            return true;
+        }
+    }
+    
+    /// <summary>
+    /// Managed wrapper over the StaticSpeexDSPPreprocessStateSafeHandler state.
+    /// </summary>
+    public class StaticSpeexDSPPreprocessStateSafeHandler : SpeexDSPPreprocessStateSafeHandler
+    {
+        /// <inheritdoc/>
+        protected override bool ReleaseHandle()
+        {
+            StaticNativeSpeexDSP.speex_preprocess_state_destroy(handle);
             return true;
         }
     }

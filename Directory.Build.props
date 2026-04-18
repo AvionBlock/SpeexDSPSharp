@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <SpeexDSPSharpVersion>1.3.0</SpeexDSPSharpVersion>
+    <SpeexDSPSharpCoreVersion>1.3.0.0</SpeexDSPSharpCoreVersion>
+    <SpeexDSPSharpNativesVersion>1.3.0.0</SpeexDSPSharpNativesVersion>
+    <PackageProjectUrl>https://avionblock.github.io/SpeexDSPSharp/index.html</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AvionBlock/SpeexDSPSharp</RepositoryUrl>
+  </PropertyGroup>
+</Project>
