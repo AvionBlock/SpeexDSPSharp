@@ -67,13 +67,27 @@ jobs:
           name: linux-${{ matrix.arch }}-libspeexdsp.so
           path: ./build/libspeexdsp/.libs/libspeexdsp.so
 
-  Win_Build_x64:
+  Windows:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [ x64, x86, arm32, arm64 ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: sudo apt-get install mingw-w64
+        
+      - name: Create Build Directory
+        run: mkdir build
+        
+      - name: Setup Environment
+        run: |
+          if [[ "${{ matrix.arch }}" == "x64" || "${{ matrix.arch }}" == "x86" ]]; then
+            sudo apt-get install mingw-w64
+          elif [[ "${{ matrix.arch }}" == "arm64" || "${{ matrix.arch }}" == "arm32" ]]; then
+            curl -LO https://github.com/mstorsjo/llvm-mingw/releases/download/20241015/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
+            tar -xf ./build/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
+            rm -rf ./build/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
+          fi
 
       - name: Clone Repository
         run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
@@ -81,115 +95,52 @@ jobs:
       - name: Autogen
         run: ./speexdsp/autogen.sh
 
-      - name: Configure And Build 64bit
-        run: ./speexdsp/configure --host=x86_64-w64-mingw32 && make
+      - name: Configure
+        working-directory: ./build
+        run: |
+          if [[ "${{ matrix.arch }}" == "x64" ]]; then
+            ../speexdsp/configure --host=x86_64-w64-mingw32
+          elif [[ "${{ matrix.arch }}" == "x86" ]]; then
+            ../speexdsp/configure --host=i686-w64-mingw32
+          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            export TOOLCHAIN=./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64
+            export TARGET=aarch64-w64-mingw32
+            export AR=$TOOLCHAIN/bin/$TARGET-llvm-ar
+            export CC="$TOOLCHAIN/bin/$TARGET-clang --target=$TARGET"
+            export AS=$CC
+            export CXX="$TOOLCHAIN/bin/$TARGET-clang++ --target=$TARGET"
+            export LD=$TOOLCHAIN/bin/$TARGET-ld
+            export RANLIB=$TOOLCHAIN/bin/$TARGET-llvm-ranlib
+            export STRIP=$TOOLCHAIN/bin/llvm-strip
+            ../speexdsp/configure --host $TARGET
+            cp -r $TOOLCHAIN ./libspeexdsp
+          elif [[ "${{ matrix.arch }}" == "arm32" ]]; then
+            export TOOLCHAIN=./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64
+            export TARGET=aarch64-w64-mingw32
+            export AR=$TOOLCHAIN/bin/$TARGET-llvm-ar
+            export CC="$TOOLCHAIN/bin/$TARGET-clang --target=$TARGET"
+            export AS=$CC
+            export CXX="$TOOLCHAIN/bin/$TARGET-clang++ --target=$TARGET"
+            export LD=$TOOLCHAIN/bin/$TARGET-ld
+            export RANLIB=$TOOLCHAIN/bin/$TARGET-llvm-ranlib
+            export STRIP=$TOOLCHAIN/bin/llvm-strip
+            ../speexdsp/configure --host $TARGET
+            cp -r $TOOLCHAIN ./libspeexdsp
+          fi
+          
+      - name: Build
+        working-directory: ./build
+        run: make
+
+      - name: Rename File
+        working-directory: ./build/libspeexdsp/.libs
+        run: mv libspeexdsp-1.dll libspeexdsp.dll
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: win-x86_64-libspeexdsp-1.dll
-          path: ./libspeexdsp/.libs/libspeexdsp-1.dll
-
-  Win_Build_x32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: sudo apt-get install mingw-w64
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit
-        run: ./speexdsp/configure --host=i686-w64-mingw32 && make
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: win-x86-libspeexdsp-1.dll
-          path: ./libspeexdsp/.libs/libspeexdsp-1.dll
-
-  Win_Build_arm64:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: |
-          curl -LO https://github.com/mstorsjo/llvm-mingw/releases/download/20241015/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-          tar -xf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-          rm -rf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 64bit ARM
-        run: |
-          export TOOLCHAIN=./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64
-          export TARGET=aarch64-w64-mingw32
-          export AR=$TOOLCHAIN/bin/$TARGET-llvm-ar
-          export CC="$TOOLCHAIN/bin/$TARGET-clang --target=$TARGET"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/$TARGET-clang++ --target=$TARGET"
-          export LD=$TOOLCHAIN/bin/$TARGET-ld
-          export RANLIB=$TOOLCHAIN/bin/$TARGET-llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          ./speexdsp/configure --host $TARGET
-          cp -r $TOOLCHAIN ./libspeexdsp
-          make
-#cp -r $TOOLCHAIN ./libspeexdsp IS STUPID BUT IT WORKS
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: win-arm64-libspeexdsp-1.dll
-          path: ./libspeexdsp/.libs/libspeexdsp-1.dll
-
-  Win_Build_arm32:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      
-      - name: Setup Build Libraries
-        run: |
-          curl -LO https://github.com/mstorsjo/llvm-mingw/releases/download/20241015/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-          tar -xf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-          rm -rf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-
-      - name: Clone Repository
-        run: git clone https://gitlab.xiph.org/xiph/speexdsp.git
-
-      - name: Autogen
-        run: ./speexdsp/autogen.sh
-
-      - name: Configure And Build 32bit ARM
-        run: |
-          export TOOLCHAIN=./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64
-          export TARGET=armv7-w64-mingw32
-          export AR=$TOOLCHAIN/bin/$TARGET-llvm-ar
-          export CC="$TOOLCHAIN/bin/$TARGET-clang --target=$TARGET"
-          export AS=$CC
-          export CXX="$TOOLCHAIN/bin/$TARGET-clang++ --target=$TARGET"
-          export LD=$TOOLCHAIN/bin/$TARGET-ld
-          export RANLIB=$TOOLCHAIN/bin/$TARGET-llvm-ranlib
-          export STRIP=$TOOLCHAIN/bin/llvm-strip
-          ./speexdsp/configure --host $TARGET
-          cp -r $TOOLCHAIN ./libspeexdsp
-          make
-#cp -r $TOOLCHAIN ./libspeexdsp IS STUPID BUT IT WORKS
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: win-arm32-libspeexdsp-1.dll
-          path: ./libspeexdsp/.libs/libspeexdsp-1.dll
+          name: win-${{ matrix.arch }}-libspeexdsp.dll
+          path: ./libspeexdsp/.libs/libspeexdsp.dll
 
   Android_Build_x64:
     runs-on: ubuntu-latest
