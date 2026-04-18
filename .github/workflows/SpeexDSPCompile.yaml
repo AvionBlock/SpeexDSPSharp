@@ -80,13 +80,14 @@ jobs:
         run: mkdir build
         
       - name: Setup Environment
+        working-directory: ./build
         run: |
           if [[ "${{ matrix.arch }}" == "x64" || "${{ matrix.arch }}" == "x86" ]]; then
             sudo apt-get install mingw-w64
           elif [[ "${{ matrix.arch }}" == "arm64" || "${{ matrix.arch }}" == "arm32" ]]; then
             curl -LO https://github.com/mstorsjo/llvm-mingw/releases/download/20241015/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-            tar -xf ./build/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
-            rm -rf ./build/llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
+            tar -xf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
+            rm -rf ./llvm-mingw-20241015-ucrt-ubuntu-20.04-x86_64.tar.xz
           fi
 
       - name: Clone Repository
